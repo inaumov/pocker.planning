@@ -170,6 +170,8 @@ paths:
       responses:
         '204':
           description: No content
+        '403':
+          description: Forbidden (due to status not PENDING)
         '404':
           description: Session or user story not found
   /sessions/{sessionId}/stories/{userStoryId}/status:
@@ -221,6 +223,8 @@ paths:
           description: Accepted
         '400':
           description: Bad Request
+        '403':
+          description: Forbidden (due to status of story already VOTED)
         '404':
           description: Session or user story not found
 components:

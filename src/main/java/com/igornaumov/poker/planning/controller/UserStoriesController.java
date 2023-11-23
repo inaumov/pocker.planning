@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.igornaumov.controller.UserStoriesApi;
+import com.igornaumov.model.Status;
 import com.igornaumov.model.UserStoryRequest;
 import com.igornaumov.model.UserStoryResponse;
 import com.igornaumov.model.UserStoryStatus;
@@ -100,8 +101,23 @@ public class UserStoriesController implements UserStoriesApi {
     @Override
     public ResponseEntity<Void> deleteUserStory(String sessionId, String userStoryId) {
         Optional<SessionEntity> sessionOptional = sessionRepository.findById(sessionId);
-        sessionOptional
-            .ifPresent(session -> userStoryRepository.deleteById(userStoryId));
+        if (sessionOptional.isEmpty()) {
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build();
+        }
+        Optional<UserStoryEntity> userStoryOptional = userStoryRepository.findById(userStoryId);
+        if (userStoryOptional.isEmpty()) {
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build();
+        }
+
+        UserStoryEntity userStoryEntity = userStoryOptional.get();
+        if (userStoryEntity.getUserStoryStatus() != Status.PENDING) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        userStoryRepository.delete(userStoryEntity);
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build();
