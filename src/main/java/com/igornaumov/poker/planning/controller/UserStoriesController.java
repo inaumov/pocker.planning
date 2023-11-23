@@ -76,7 +76,25 @@ public class UserStoriesController implements UserStoriesApi {
     @Override
     public ResponseEntity<UserStoryResponse> updateUserStoryStatus(String sessionId, String userStoryId,
                                                                    UserStoryStatusUpdateRequest userStoryStatusUpdateRequest) {
-        return null;
+        Optional<SessionEntity> sessionOptional = sessionRepository.findById(sessionId);
+        if (sessionOptional.isEmpty()) {
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build();
+        }
+        Optional<UserStoryEntity> userStoryOptional = userStoryRepository.findById(userStoryId);
+        if (userStoryOptional.isEmpty()) {
+            return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .build();
+        }
+
+        return userStoryOptional
+            .map(entity -> {
+                entity.setUserStoryStatus(userStoryStatusUpdateRequest.getStatus().name());
+                return ResponseEntity.ok(toResponse(entity));
+            })
+            .orElse(new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
     @Override
@@ -96,7 +114,7 @@ public class UserStoriesController implements UserStoriesApi {
     }
 
     private static UserStoryStatus toStatusResponse(UserStoryEntity entity) {
-        return new UserStoryStatus(entity.getUserStoryStatus(), 0);
+        return new UserStoryStatus(UserStoryStatus.StatusEnum.valueOf(entity.getUserStoryStatus()), 0);
     }
 
 }

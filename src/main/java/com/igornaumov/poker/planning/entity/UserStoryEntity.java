@@ -23,7 +23,7 @@ public class UserStoryEntity {
     @Column(name = "description")
     private String description;
     @Column(name = "status")
-    private UserStoryStatus.StatusEnum userStoryStatus;
+    private String userStoryStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "session_id")
@@ -45,11 +45,11 @@ public class UserStoryEntity {
         return description;
     }
 
-    public UserStoryStatus.StatusEnum getUserStoryStatus() {
+    public String getUserStoryStatus() {
         return userStoryStatus;
     }
 
-    public void setUserStoryStatus(UserStoryStatus.StatusEnum userStoryStatus) {
+    public void setUserStoryStatus(String userStoryStatus) {
         this.userStoryStatus = userStoryStatus;
     }
 
