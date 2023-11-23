@@ -91,7 +91,7 @@ public class UserStoriesController implements UserStoriesApi {
 
         return userStoryOptional
             .map(entity -> {
-                entity.setUserStoryStatus(userStoryStatusUpdateRequest.getStatus().name());
+                entity.setUserStoryStatus(userStoryStatusUpdateRequest.getStatus());
                 return ResponseEntity.ok(toResponse(entity));
             })
             .orElse(new ResponseEntity<>(HttpStatus.CONFLICT));
@@ -114,7 +114,7 @@ public class UserStoriesController implements UserStoriesApi {
     }
 
     private static UserStoryStatus toStatusResponse(UserStoryEntity entity) {
-        return new UserStoryStatus(UserStoryStatus.StatusEnum.valueOf(entity.getUserStoryStatus()), 0);
+        return new UserStoryStatus(entity.getUserStoryStatus(), 0);
     }
 
 }

@@ -273,15 +273,9 @@ components:
     UserStoryStatusUpdateRequest:
       type: object
       properties:
-        id:
-          type: string
         status:
           type: string
-          enum:
-            - PENDING
-            - VOTING
-            - VOTED
-          default: PENDING
+          $ref: '#/components/schemas/Status'
     UserStoryResponse:
       type: object
       properties:
@@ -290,12 +284,7 @@ components:
         description:
           type: string
         status:
-          type: string
-          enum:
-            - PENDING
-            - VOTING
-            - VOTED
-          default: PENDING
+          $ref: '#/components/schemas/Status'
     UserStoryStatus:
       type: object
       required:
@@ -303,12 +292,7 @@ components:
         - emitted-votes
       properties:
         status:
-          type: string
-          enum:
-            - PENDING
-            - VOTING
-            - VOTED
-          default: PENDING
+          $ref: '#/components/schemas/Status'
         emitted-votes:
           type: int
     VoteRequest:
@@ -321,3 +305,10 @@ components:
           type: string
         value:
           type: string
+    Status:
+      type: string
+      enum:
+        - PENDING
+        - VOTING
+        - VOTED
+      default: PENDING

@@ -1,6 +1,7 @@
 package com.igornaumov.poker.planning.entity;
 
 
+import com.igornaumov.model.Status;
 import com.igornaumov.model.UserStoryStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +24,7 @@ public class UserStoryEntity {
     @Column(name = "description")
     private String description;
     @Column(name = "status")
-    private String userStoryStatus;
+    private Status userStoryStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "session_id")
@@ -45,11 +46,11 @@ public class UserStoryEntity {
         return description;
     }
 
-    public String getUserStoryStatus() {
+    public Status getUserStoryStatus() {
         return userStoryStatus;
     }
 
-    public void setUserStoryStatus(String userStoryStatus) {
+    public void setUserStoryStatus(Status userStoryStatus) {
         this.userStoryStatus = userStoryStatus;
     }
 
