@@ -1,0 +1,344 @@
+openapi: 3.0.3
+servers:
+  - url: http://localhost:8080
+info:
+  title: Poker Planning App
+  version: 0.0.1-SNAPSHOT
+paths:
+  /sessions:
+    post:
+      operationId: createNewSession
+      tags:
+        - sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionRequest"
+      responses:
+        '201':
+          description: New session has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+  /sessions/{sessionId}:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - sessions
+      operationId: getSessionDetails
+      responses:
+        '200':
+          description: Session details by Id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+        '404':
+          description: Session not found
+    delete:
+      tags:
+        - sessions
+      operationId: deleteSession
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: Session not found
+  /sessions/{sessionId}/users:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - users
+      operationId: joinSession
+      requestBody:
+        description: New user has been added to session
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        '202':
+          description: A user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        '404':
+          description: Session ot found
+    get:
+      operationId: getUsersInSession
+      tags:
+        - users
+      responses:
+        '200':
+          description: All users in session response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+        '404':
+          description: Session not found
+  /sessions/{sessionId}/stories:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - user stories
+      operationId: addUserStory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserStoryRequest"
+      responses:
+        '201':
+          description: New user story has been created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStoryResponse"
+        '404':
+          description: Session not found
+    get:
+      operationId: getStoriesInSession
+      tags:
+        - user stories
+      responses:
+        '200':
+          description: All user stories in session
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserStoryResponse"
+        '404':
+          description: Session not found
+  /sessions/{sessionId}/stories/{userStoryId}:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userStoryId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      operationId: updateUserStoryStatus
+      tags:
+        - user stories
+      requestBody:
+        description: User story update status request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserStoryStatusUpdateRequest"
+      responses:
+        '200':
+          description: A user story
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStoryResponse"
+        '404':
+          description: Not found
+    delete:
+      operationId: deleteUserStory
+      tags:
+        - user stories
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: Session or user story not found
+  /sessions/{sessionId}/stories/{userStoryId}/status:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userStoryId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getUserStoryStatus
+      tags:
+        - user stories
+      responses:
+        '200':
+          description: Current status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStoryStatus"
+  /sessions/{sessionId}/stories/{userStoryId}/stop:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userStoryId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      operationId: stopVoting
+      tags:
+        - votes
+      responses:
+        '202':
+          description: Accepted
+        '404':
+          description: Session or user story not found
+  /sessions/{sessionId}/users/{userId}/vote:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      operationId: vote
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VoteRequest"
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+        '404':
+          description: Session or user story not found
+components:
+  schemas:
+    SessionRequest:
+      type: object
+      required:
+        - title
+        - deckType
+      properties:
+        title:
+          type: string
+        deckType:
+          type: string
+    SessionResponse:
+      type: object
+      required:
+        - id
+        - title
+        - deckType
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        deckType:
+          type: string
+    UserRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    UserResponse:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    UserStoryRequest:
+      type: object
+      properties:
+        description:
+          type: string
+    UserStoryStatusUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+            - PENDING
+            - VOTING
+            - VOTED
+          default: PENDING
+    UserStoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+            - PENDING
+            - VOTING
+            - VOTED
+          default: PENDING
+    UserStoryStatus:
+      type: object
+      required:
+        - status
+        - emitted-votes
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - VOTING
+            - VOTED
+          default: PENDING
+        emitted-votes:
+          type: int
+    VoteRequest:
+      type: object
+      required:
+        - userStoryId
+        - value
+      properties:
+        userStoryId:
+          type: string
+        value:
+          type: string

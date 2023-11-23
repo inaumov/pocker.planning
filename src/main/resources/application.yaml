@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:poker_planning;INIT=CREATE SCHEMA IF NOT EXISTS poker_planning
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate.ddl-auto: update
+  h2:
+    console.enabled: true
