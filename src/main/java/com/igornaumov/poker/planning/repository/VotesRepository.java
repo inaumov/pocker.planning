@@ -7,6 +7,6 @@ import com.igornaumov.poker.planning.entity.VoteEntity;
 import com.igornaumov.poker.planning.entity.VoteId;
 
 @Repository
-public interface VotingRepository extends JpaRepository<VoteEntity, VoteId> {
+public interface VotesRepository extends JpaRepository<VoteEntity, VoteId> {
 
 }
