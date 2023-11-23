@@ -15,6 +15,7 @@ import com.igornaumov.model.UserStoryStatus;
 import com.igornaumov.model.UserStoryStatusUpdateRequest;
 import com.igornaumov.poker.planning.entity.SessionEntity;
 import com.igornaumov.poker.planning.entity.UserStoryEntity;
+import com.igornaumov.poker.planning.entity.VoteEntity;
 import com.igornaumov.poker.planning.repository.SessionRepository;
 import com.igornaumov.poker.planning.repository.UserStoryRepository;
 import com.igornaumov.poker.planning.repository.VotesRepository;
@@ -75,7 +76,9 @@ public class UserStoriesController implements UserStoriesApi {
         }
         return userStoryRepository.findById(userStoryId)
             .map(status -> {
-                Integer emittedVotes = votesRepository.countByUserStoryId(userStoryId);
+                List<String> emittedVotes = votesRepository.findAllByUserStoryId(userStoryId)
+                    .stream().map(VoteEntity::getUserId)
+                    .toList();
                 return ResponseEntity.ok(toStatusResponse(status, emittedVotes));
             })
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -136,8 +139,12 @@ public class UserStoriesController implements UserStoriesApi {
             .description(entity.getDescription());
     }
 
-    private static UserStoryStatus toStatusResponse(UserStoryEntity entity, Integer emittedVotes) {
-        return new UserStoryStatus(entity.getUserStoryStatus(), emittedVotes);
+    private static UserStoryStatus toStatusResponse(UserStoryEntity entity, List<String> emittedVotes) {
+        if (emittedVotes.isEmpty()) {
+            return new UserStoryStatus(entity.getUserStoryStatus(), 0);
+        }
+        return new UserStoryStatus(entity.getUserStoryStatus(), emittedVotes.size())
+            .usersVoted(emittedVotes);
     }
 
 }

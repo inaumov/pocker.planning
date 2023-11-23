@@ -299,6 +299,10 @@ components:
           $ref: '#/components/schemas/Status'
         emitted-votes:
           type: int
+        users-voted:
+          type: array
+          items:
+            type: string
     VoteRequest:
       type: object
       required:
