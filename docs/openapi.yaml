@@ -144,25 +144,6 @@ paths:
         required: true
         schema:
           type: string
-    put:
-      operationId: updateUserStoryStatus
-      tags:
-        - user stories
-      requestBody:
-        description: User story update status request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserStoryStatusUpdateRequest"
-      responses:
-        '200':
-          description: A user story
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserStoryResponse"
-        '404':
-          description: Session or user story not found
     delete:
       operationId: deleteUserStory
       tags:
@@ -197,6 +178,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserStoryStatus"
+    put:
+      operationId: updateUserStoryStatus
+      tags:
+        - user stories
+      requestBody:
+        description: User story update status request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserStoryStatusUpdateRequest"
+      responses:
+        '200':
+          description: A user story
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStoryResponse"
+        '404':
+          description: Session or user story not found
   /sessions/{sessionId}/users/{userId}/votes:
     parameters:
       - name: sessionId

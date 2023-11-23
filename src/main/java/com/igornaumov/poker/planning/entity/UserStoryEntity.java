@@ -2,8 +2,8 @@ package com.igornaumov.poker.planning.entity;
 
 
 import com.igornaumov.model.Status;
-import com.igornaumov.model.UserStoryStatus;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +24,7 @@ public class UserStoryEntity {
     @Column(name = "description")
     private String description;
     @Column(name = "status")
+    @Convert(converter = StatusConverter.class)
     private Status userStoryStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -103,7 +103,8 @@ public class UserStoriesController implements UserStoriesApi {
         return userStoryOptional
             .map(entity -> {
                 entity.setUserStoryStatus(userStoryStatusUpdateRequest.getStatus());
-                return ResponseEntity.ok(toResponse(entity));
+                UserStoryEntity saved = userStoryRepository.save(entity);
+                return ResponseEntity.ok(toResponse(saved));
             })
             .orElse(new ResponseEntity<>(HttpStatus.CONFLICT));
     }
