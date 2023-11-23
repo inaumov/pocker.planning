@@ -17,16 +17,20 @@ import com.igornaumov.poker.planning.entity.SessionEntity;
 import com.igornaumov.poker.planning.entity.UserStoryEntity;
 import com.igornaumov.poker.planning.repository.SessionRepository;
 import com.igornaumov.poker.planning.repository.UserStoryRepository;
+import com.igornaumov.poker.planning.repository.VotesRepository;
 
 @RestController
 public class UserStoriesController implements UserStoriesApi {
 
     private final SessionRepository sessionRepository;
     private final UserStoryRepository userStoryRepository;
+    private final VotesRepository votesRepository;
 
-    public UserStoriesController(SessionRepository sessionRepository, UserStoryRepository userStoryRepository) {
+    public UserStoriesController(SessionRepository sessionRepository, UserStoryRepository userStoryRepository,
+                                 VotesRepository votesRepository) {
         this.sessionRepository = sessionRepository;
         this.userStoryRepository = userStoryRepository;
+        this.votesRepository = votesRepository;
     }
 
     @Override
@@ -70,7 +74,10 @@ public class UserStoriesController implements UserStoriesApi {
                 .build();
         }
         return userStoryRepository.findById(userStoryId)
-            .map(status -> ResponseEntity.ok(toStatusResponse(status)))
+            .map(status -> {
+                Integer emittedVotes = votesRepository.countByUserStoryId(userStoryId);
+                return ResponseEntity.ok(toStatusResponse(status, emittedVotes));
+            })
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -129,8 +136,8 @@ public class UserStoriesController implements UserStoriesApi {
             .description(entity.getDescription());
     }
 
-    private static UserStoryStatus toStatusResponse(UserStoryEntity entity) {
-        return new UserStoryStatus(entity.getUserStoryStatus(), 0);
+    private static UserStoryStatus toStatusResponse(UserStoryEntity entity, Integer emittedVotes) {
+        return new UserStoryStatus(entity.getUserStoryStatus(), emittedVotes);
     }
 
 }

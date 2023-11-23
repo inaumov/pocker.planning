@@ -9,4 +9,5 @@ import com.igornaumov.poker.planning.entity.VoteId;
 @Repository
 public interface VotesRepository extends JpaRepository<VoteEntity, VoteId> {
 
+    Integer countByUserStoryId(String userStoryId);
 }
