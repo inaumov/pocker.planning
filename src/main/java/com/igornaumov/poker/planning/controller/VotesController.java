@@ -48,7 +48,8 @@ public class VotesController implements VotesApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        votesRepository.save(new VoteEntity(userId, voteRequest.getUserStoryId(), voteRequest.getValue(), sessionId));
+        votesRepository.save(new VoteEntity(userId, voteRequest.getUserStoryId(), voteRequest.getValue(),
+            sessionOptional.get().getId()));
         return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
     }
 

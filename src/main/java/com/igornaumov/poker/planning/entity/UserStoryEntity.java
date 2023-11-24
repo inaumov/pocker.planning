@@ -5,12 +5,9 @@ import com.igornaumov.model.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,17 +23,15 @@ public class UserStoryEntity {
     @Column(name = "status")
     @Convert(converter = StatusConverter.class)
     private Status userStoryStatus;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "session_id")
-    private SessionEntity session;
+    @Column(name = "session_id")
+    private String sessionId;
 
     public UserStoryEntity() {
     }
 
-    public UserStoryEntity(String description, SessionEntity session) {
+    public UserStoryEntity(String description, String sessionId) {
         this.description = description;
-        this.session = session;
+        this.sessionId = sessionId;
     }
 
     public String getId() {
@@ -55,8 +50,8 @@ public class UserStoryEntity {
         this.userStoryStatus = userStoryStatus;
     }
 
-    public SessionEntity getSession() {
-        return session;
+    public String getSessionId() {
+        return sessionId;
     }
 
 }

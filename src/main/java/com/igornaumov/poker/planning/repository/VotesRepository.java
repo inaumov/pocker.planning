@@ -11,5 +11,7 @@ import com.igornaumov.poker.planning.entity.VoteId;
 @Repository
 public interface VotesRepository extends JpaRepository<VoteEntity, VoteId> {
 
-     List<VoteEntity> findAllByUserStoryId(String userStoryId);
+    List<VoteEntity> findAllByUserStoryId(String userStoryId);
+
+    void deleteBySessionId(String sessionId);
 }

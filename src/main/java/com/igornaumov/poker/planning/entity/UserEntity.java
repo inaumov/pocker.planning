@@ -3,12 +3,9 @@ package com.igornaumov.poker.planning.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,17 +18,15 @@ public class UserEntity {
     private String id;
     @Column(name = "nickname")
     private String name;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "session_id")
-    private SessionEntity session;
+    @Column(name = "session_id")
+    private String sessionId;
 
     public UserEntity() {
     }
 
-    public UserEntity(String name, SessionEntity session) {
+    public UserEntity(String name, String sessionId) {
         this.name = name;
-        this.session = session;
+        this.sessionId = sessionId;
     }
 
     public String getId() {
@@ -42,8 +37,8 @@ public class UserEntity {
         return name;
     }
 
-    public SessionEntity getSession() {
-        return session;
+    public String getSessionId() {
+        return sessionId;
     }
 
 }

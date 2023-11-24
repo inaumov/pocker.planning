@@ -51,7 +51,7 @@ public class UsersController implements UsersApi {
         UserEntity saved = usersRepository.save(
             new UserEntity(
                 userRequest.getName(),
-                sessionOptional.get())
+                sessionOptional.get().getId())
         );
         return ResponseEntity
             .status(HttpStatus.CREATED)

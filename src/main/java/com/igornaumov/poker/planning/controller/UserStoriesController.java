@@ -1,5 +1,6 @@
 package com.igornaumov.poker.planning.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class UserStoriesController implements UserStoriesApi {
         UserStoryEntity saved = userStoryRepository.save(
             new UserStoryEntity(
                 userStoryRequest.getDescription(),
-                sessionOptional.get())
+                sessionOptional.get().getId())
         );
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -85,8 +86,8 @@ public class UserStoriesController implements UserStoriesApi {
     }
 
     @Override
-    public ResponseEntity<UserStoryResponse> updateUserStoryStatus(String sessionId, String userStoryId,
-                                                                   UserStoryStatusUpdateRequest userStoryStatusUpdateRequest) {
+    public ResponseEntity<UserStoryStatus> updateUserStoryStatus(String sessionId, String userStoryId,
+                                                                 UserStoryStatusUpdateRequest userStoryStatusUpdateRequest) {
         Optional<SessionEntity> sessionOptional = sessionRepository.findById(sessionId);
         if (sessionOptional.isEmpty()) {
             return ResponseEntity
@@ -104,7 +105,7 @@ public class UserStoriesController implements UserStoriesApi {
             .map(entity -> {
                 entity.setUserStoryStatus(userStoryStatusUpdateRequest.getStatus());
                 UserStoryEntity saved = userStoryRepository.save(entity);
-                return ResponseEntity.ok(toResponse(saved));
+                return ResponseEntity.ok(toStatusResponse(saved, Collections.emptyList()));
             })
             .orElse(new ResponseEntity<>(HttpStatus.CONFLICT));
     }
