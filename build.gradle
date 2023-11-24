@@ -45,35 +45,30 @@ openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/docs/openapi.yaml".toString()
     outputDir = "$rootDir/generated-api"
-    invokerPackage = "{$group}"
+    invokerPackage = "$group"
     apiPackage = "com.igornaumov.controller"
     modelPackage = "com.igornaumov.model"
+    generateApiTests = true
+    generateModelTests = true
     groupId = "$group"
     version = "$version"
     configOptions = [
-            "dateLibrary"               : "java8",
-            "useJakartaEe"              : "true",
-            "useSpringBoot3"            : "true",
-            "generateApis"              : "true",
-            "generateApiTests"          : "false",
-            "generateModels"            : "true",
-            "generateModelTests"        : "false",
-            "generateModelDocumentation": "false",
-            "generateSupportingFiles"   : "false",
-            "hideGenerationTimestamp"   : "true",
-            "interfaceOnly"             : "true",
-            "skipDefaultInterface"      : "true",
-            "library"                   : "spring-boot",
-            "serializableModel"         : "true",
-            "useBeanValidation"         : "true",
-            "useTags"                   : "true",
-            "implicitHeaders"           : "true",
-            "openApiNullable"           : "false",
-            "useRuntimeException"       : "true",
-            "serializationLibrary"      : "jackson",
-            "verbose"                   : "true",
-            "booleanGetterPrefix"       : "true",
-            "useOptional"               : "true"
+            "testOutput"             : "$rootDir/generated-api/src/test/java",
+            "dateLibrary"            : "java8",
+            "useJakartaEe"           : "true",
+            "useSpringBoot3"         : "true",
+            "hideGenerationTimestamp": "false",
+            "interfaceOnly"          : "true",
+            "skipDefaultInterface"   : "true",
+            "library"                : "spring-boot",
+            "serializableModel"      : "true",
+            "useBeanValidation"      : "true",
+            "useTags"                : "true",
+            "implicitHeaders"        : "true",
+            "openApiNullable"        : "false",
+            "serializationLibrary"   : "jackson",
+            "booleanGetterPrefix"    : "true",
+            "useOptional"            : "false",
     ]
 }
 
