@@ -22,6 +22,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SessionResponse"
+        '400':
+          description: Bad Request - field is missing
   /sessions/{sessionId}:
     parameters:
       - name: sessionId
@@ -75,6 +77,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserResponse"
+        '400':
+          description: Bad Request - field is missing
         '404':
           description: Session ot found
     get:
@@ -115,6 +119,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserStoryResponse"
+        '400':
+          description: Bad Request - field is missing
         '404':
           description: Session not found
     get:
@@ -195,6 +201,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserStoryStatus"
+        '400':
+          description: Bad Request - field is missing
         '404':
           description: Session or user story not found
   /sessions/{sessionId}/users/{userId}/votes:
@@ -222,7 +230,7 @@ paths:
         '202':
           description: Accepted
         '400':
-          description: Bad Request
+          description: Bad Request - field is missing
         '403':
           description: Forbidden (due to status of story already VOTED)
         '404':
@@ -276,6 +284,8 @@ components:
           type: string
     UserStoryStatusUpdateRequest:
       type: object
+      required:
+        - status
       properties:
         status:
           type: string
